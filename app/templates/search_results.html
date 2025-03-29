@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<title>GIRIGHT | 検索結果</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<nav class="navbar">
+  <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+  <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+  <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+  <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+  <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+</nav>
+<div class="container">
+{# Removed existing_names definition as it is no longer needed #}
+  <div style="margin-bottom: 1em;">
+    <strong>カテゴリで絞り込み：</strong>
+    {% for cat in ['shelter', 'sleep', 'pack', 'cook', 'wear', 'water', 'elec', 'misc'] %}
+      {% if selected_category == cat %}
+        <strong style="color: purple;">{{ cat }}</strong>
+      {% else %}
+        <a href="{{ url_for('main.search_gear', category=cat) }}" style="margin-right: 10px;">{{ cat }}</a>
+      {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('main.search_gear') }}">[ 全表示 ]</a>
+  </div>
+  <h1>🔍 「{{ query }}」の検索結果</h1>
+
+  {% if results %}
+    <table border="1" cellpadding="6" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+      <thead style="background-color: #f0f8ff;">
+        <tr>
+          <th>重複</th>
+          <th>ギア名</th>
+          <th>重さ</th>
+          <th>カテゴリ</th>
+          <th>メーカー</th>
+          <th>メモ</th>
+          <th>📥 登録</th>
+          <th>⚡ すぐ登録</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for gear in results %}
+        {% set gear_key = gear.name ~ '|' ~ gear.manufacturer ~ '|' ~ gear.category %}
+        {% set row_color = '#ffffff' if loop.index0 % 2 == 0 else '#e6f7ff' %}
+        <tr style="background-color: {{ row_color }};">
+        {% if gear_key in existing_keys %}
+  <td style="color: red; font-weight: bold;">⚠️ 登録済み</td>
+{% else %}
+  <td></td>
+{% endif %}
+          <td><strong>{{ gear.name }}</strong></td>
+          <td>{{ gear.weight }}g</td>
+          <td>{{ gear.category }}</td>
+          <td>{{ gear.manufacturer }}</td>
+          <td><em>{{ gear.notes }}</em></td>
+          <td>
+            <form action="{{ url_for('main.add_gear') }}" method="get">
+              <input type="hidden" name="name" value="{{ gear.name }}">
+              <input type="hidden" name="manufacturer" value="{{ gear.manufacturer }}">
+              <input type="hidden" name="weight" value="{{ gear.weight }}">
+              <input type="hidden" name="category" value="{{ gear.category }}">
+              <input type="hidden" name="notes" value="{{ gear.notes }}">
+              <button type="submit">📥</button>
+            </form>
+          </td>
+          <td>
+            <form action="{{ url_for('main.quick_add') }}" method="post">
+              <input type="hidden" name="name" value="{{ gear.name }}">
+              <input type="hidden" name="manufacturer" value="{{ gear.manufacturer }}">
+              <input type="hidden" name="weight" value="{{ gear.weight }}">
+              <input type="hidden" name="category" value="{{ gear.category }}">
+              <input type="hidden" name="notes" value="{{ gear.notes }}">
+              <button type="submit">⚡</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>該当するギアが見つかりませんでした。</p>
+  {% endif %}
+
+  <a href="{{ url_for('main.index') }}">← 戻る</a>
+</div>
+</body>
+</html>

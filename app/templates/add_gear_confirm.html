@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <title>登録確認 | GIRIGHT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+    <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+    <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+    <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+    <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+  </nav>
+  <div class="container">
+    <h1>⚠️ このギアはすでに登録されています</h1>
+    <p>同じ名前・メーカー・カテゴリのギアがすでに存在します。</p>
+
+  <table border="1" cellpadding="6">
+    <tr><th>項目</th><th>入力内容</th></tr>
+    <tr><td>ギア名</td><td>{{ form.name.data }}</td></tr>
+    <tr><td>メーカー</td><td>{{ form.manufacturer.data }}</td></tr>
+    <tr><td>カテゴリ</td><td>{{ form.category.data }}</td></tr>
+    <tr><td>重さ</td><td>{{ form.weight.data }} g</td></tr>
+    <tr><td>必携</td><td>{{ form.essential.data }}</td></tr>
+    <tr><td>持ってく</td><td>{{ form.is_packed.data }}</td></tr>
+    <tr><td>メモ</td><td>{{ form.notes.data }}</td></tr>
+  </table>
+
+  <form method="POST" action="{{ url_for('main.add_gear', confirm='true') }}">
+    {{ form.hidden_tag() }}
+    <button type="submit">✅ 登録する</button>
+    <a href="{{ url_for('main.index') }}">❌ キャンセル</a>
+  </form>
+  </div>
+</body>
+</html>

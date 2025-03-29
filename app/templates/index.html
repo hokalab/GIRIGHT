@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <title>GIRIGHT | ギア一覧</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+    <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+    <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+    <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+    <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+  </nav>
+  <div class="container">
+    <form method="GET" action="{{ url_for('main.search_gear') }}">
+      <input type="text" name="q" placeholder="ギアを検索" required>
+      <button type="submit">🔍 検索</button>
+    </form>
+    
+    <h1>🎒 GIRIGHT - ギア一覧</h1>
+    <a href="{{ url_for('main.add_gear') }}">➕ ギアを追加</a>
+    
+    {% set categories = {} %}
+    {% for gear in gears %}
+      {% set _ = categories.setdefault(gear.category, []) %}
+      {% set _ = categories[gear.category].append(gear) %}
+    {% endfor %}
+
+    {% for category, items in categories.items() %}
+      <h2>{{ category|capitalize }}</h2>
+      <ul>
+        {% for gear in items %}
+        <li>
+          <strong>{{ gear.name }}</strong> ({{ gear.weight }}g) - {{ gear.category }}{% if gear.essential %} [必携]{% endif %} - 
+          {{ gear.manufacturer }} - 
+          <em>{{ gear.notes }}</em>
+          <form action="{{ url_for('main.delete_gear', gear_id=gear.id) }}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('本当に削除する？')">🗑 削除</button>
+          </form>
+          <a href="{{ url_for('main.edit_gear', gear_id=gear.id) }}">✏️ 編集</a>
+          <form action="{{ url_for('main.toggle_pack', gear_id=gear.id) }}" method="post" style="display:inline;">
+            <button type="submit">
+              {% if gear.is_packed %}
+                ✅ 持ってく
+              {% else %}
+                ➖ 持たない
+              {% endif %}
+            </button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  </div>
+</body>
+</html>

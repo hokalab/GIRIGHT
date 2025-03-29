@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <title>GIRIGHT | カテゴリ別重さ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav class="navbar">
+  <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+  <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+  <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+  <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+  <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+</nav>
+<div class="container">
+  <h1>📊 カテゴリ別 ギア重量比率</h1>
+  <canvas id="gearChart" width="400" height="400"></canvas>
+  <script>
+    const ctx = document.getElementById('gearChart').getContext('2d');
+    const gearChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: JSON.parse('{{ labels | tojson | safe }}'),
+        datasets: [{
+          data: JSON.parse('{{ data | tojson | safe }}'),
+          backgroundColor: [
+            'rgba(255,99,132,0.5)',
+            'rgba(54,162,235,0.5)',
+            'rgba(255,206,86,0.5)',
+            'rgba(75,192,192,0.5)',
+            'rgba(153,102,255,0.5)',
+            'rgba(255,159,64,0.5)',
+            'rgba(201,203,207,0.5)',
+            'rgba(0,255,127,0.5)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#ffd369'
+            }
+          }
+        }
+      }
+    });
+  </script>
+  <a href="{{ url_for('main.index') }}">← 戻る</a>
+</div>
+</body>
+</html>

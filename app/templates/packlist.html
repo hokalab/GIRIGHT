@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <title>GIRIGHT | パッキングリスト</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+    <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+    <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+    <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+    <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+  </nav>
+  <div class="container">
+    <h1>🎒 パッキングリスト</h1>
+
+  <p><strong>今回持ってくギアの総重量：</strong> {{ total_weight }} g</p>
+  <p><strong>目標重量：</strong> {{ target_weight }} g<br>
+    {% if over > 0 %}
+      🥵 <strong>{{ over }}</strong> g オーバーしてるよ！
+    {% else %}
+      🥳 余裕あり！<strong>{{ -over }}</strong> g まで積めるよ！
+    {% endif %}
+  </p>
+
+  <h2>カテゴリ別の重さ内訳</h2>
+    <ul>
+    {% for category, weight in category_weights.items() %}
+        <li><strong>{{ category|capitalize }}</strong>: {{ weight }} g</li>
+    {% endfor %}
+    </ul>
+
+  {% set category_groups = {} %}
+  {% for gear in gears %}
+    {% set _ = category_groups.setdefault(gear.category, []) %}
+    {% set _ = category_groups[gear.category].append(gear) %}
+  {% endfor %}
+
+  {% for category, items in category_groups.items() %}
+    <h2>{{ category|capitalize }}</h2>
+    <ul>
+      {% for gear in items %}
+      <li style="margin-left: 1em;">
+        <strong>{{ gear.name }}</strong> ({{ gear.weight }}g)
+        {% if gear.essential %} [必携]{% endif %} - {{ gear.manufacturer }} - <em>{{ gear.notes }}</em>
+      </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+
+  <a href="{{ url_for('main.index') }}">← 戻る</a>
+  </div>
+</body>
+</html>

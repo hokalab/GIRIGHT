@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <title>GIRIGHT | ギア編集</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('main.index') }}">🏠 ホーム</a>
+    <a href="{{ url_for('main.search_gear') }}">🔍 検索</a>
+    <a href="{{ url_for('main.add_gear') }}">➕ ギア追加</a>
+    <a href="{{ url_for('main.packlist') }}">🎒 パックリスト</a>
+    <a href="{{ url_for('main.stats') }}">📊 スタッツ</a>
+  </nav>
+  <div class="container">
+    <h1>✏️ ギア編集：{{ gear.name }}</h1>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <p>{{ form.name.label }} {{ form.name(size=30) }}</p>
+      <p>{{ form.manufacturer.label }} {{ form.manufacturer(size=30) }}</p>
+      <p>{{ form.weight.label }} {{ form.weight() }}</p>
+      <p>{{ form.category.label }} {{ form.category() }}</p>
+      <p>{{ form.essential() }} {{ form.essential.label }}</p>
+      <p>{{ form.notes.label }}<br>{{ form.notes(rows=4, cols=40) }}</p>
+      <p>{{ form.submit() }}</p>
+    </form>
+    <a href="{{ url_for('main.index') }}">← 戻る</a>
+  </div>
+</body>
+</html>
