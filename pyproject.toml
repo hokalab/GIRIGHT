@@ -3,7 +3,7 @@ name = "giright"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "kaholab",email = "mumpond@gmail.com"}
+    {name = "hokalab",email = "mumpond@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.11"

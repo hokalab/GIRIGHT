@@ -25,7 +25,7 @@ GIRIGHTは、アウトドア愛好家のためのギア管理Webアプリケー�
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/kaholab/GIRIGHT.git
+git clone https://github.com/hokalab/GIRIGHT.git
 cd GIRIGHT
 
 # Poetryを使って依存パッケージをインストール
