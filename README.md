@@ -25,15 +25,11 @@ GIRIGHTは、アウトドア愛好家のためのギア管理Webアプリケー�
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/yourusername/GIRIGHT.git
+git clone https://github.com/kaholab/GIRIGHT.git
 cd GIRIGHT
 
-# 仮想環境を作成して有効化
-python -m venv venv
-source venv/bin/activate  # Windowsの場合: venv\Scripts\activate
-
-# 依存パッケージをインストール
-pip install -r requirements.txt
+# Poetryを使って依存パッケージをインストール
+poetry install
 
 # 環境変数の設定（オプション）
 export SECRET_KEY="your-secret-key"
@@ -41,7 +37,7 @@ export FLASK_ENV="development"  # 開発環境の場合
 
 # データベースの初期化
 mkdir -p instance
-flask --app run.py shell
+poetry run flask --app run.py shell
 # Pythonシェルで以下を実行
 from app import create_app, db
 app = create_app()
@@ -50,14 +46,14 @@ with app.app_context():
 # Ctrl+Dでシェルを終了
 
 # サンプルデータの追加（オプション）
-python seed.py
+poetry run python seed.py
 ```
 
 ## 使い方
 
 ```bash
 # アプリケーションを実行
-python run.py
+poetry run python run.py
 ```
 
 ブラウザで http://localhost:5000 にアクセスしてください。
@@ -77,7 +73,9 @@ GIRIGHT/
 ├── config.py        # 設定ファイル
 ├── run.py           # アプリケーション実行ファイル
 ├── seed.py          # サンプルデータ追加スクリプト
-├── requirements.txt # 依存パッケージリスト
+├── pyproject.toml   # Poetryプロジェクト設定と依存関係
+├── poetry.lock      # 依存パッケージのロックファイル
+├── requirements.txt # 依存パッケージリスト（互換性用）
 └── README.md        # このファイル
 ```
 
